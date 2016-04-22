@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import User, Post, Photo
+from .models import User, Post, Photo, University
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,12 +10,15 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'posts', )
 
-
+class UniversitySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = University
+        fields = ('name','logo','city')
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer(required=False)
     photos = serializers.HyperlinkedIdentityField(view_name='postphoto-list')
     # author = serializers.HyperlinkedRelatedField(view_name='user-detail', lookup_field='username')
-
     def get_validation_exclusions(self, *args, **kwargs):
         # Need to exclude `user` since we'll add that later based off the request
         exclusions = super(PostSerializer, self).get_validation_exclusions(*args, **kwargs)
